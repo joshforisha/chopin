@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.summary     = 'Chopin'
-  s.description = 'A simple static site generator'
+  s.description = 'An elegant, simple static site generator'
 
   s.authors     = ['Josh Forisha']
   s.email       = 'josh@forisha.com'
