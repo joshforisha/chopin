@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require '/Users/josh/Code/Chopin/lib/chopin'
+
+chopin = Chopin.new(ARGV[0], ARGV[1])
+chopin.build
