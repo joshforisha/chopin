@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'chopin'
-  s.version     = '0.0.1'
+  s.version     = '0.0.2'
   s.license     = 'MIT'
 
   s.summary     = 'Chopin'
@@ -12,4 +12,6 @@ Gem::Specification.new do |s|
 
   s.executables = ['chopin']
   s.files       = ['lib/chopin.rb']
+
+  s.add_runtime_dependency "redcarpet", [ '= 3.2.3' ]
 end
