@@ -1,20 +1,16 @@
 # Chopin
 
-**TODO: Add description**
+Generate a static web site from a series of EEX templates and Markdown files.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+## How to use
 
-  1. Add chopin to your list of dependencies in `mix.exs`:
+    chopin <source-directory> <destination-directory>
 
-        def deps do
-          [{:chopin, "~> 0.0.1"}]
-        end
-
-  2. Ensure chopin is started before your application:
-
-        def application do
-          [applications: [:chopin]]
-        end
-
+There are five rules to determine what Chopin does with each file in the source directory:
+1. A file beginning with `.` is ignored.
+2. A file named `layout.eex` is used as a template for sibling and child directories.
+3. Any `.eex` or `.md` file is parsed and rendered inside the closest `layout.eex` template, within `<%= yield %>`.
+4. A directory is copied over to the destination, then its contents are parsed recursively.
+5. Any other file is copied over as-is.
