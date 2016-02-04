@@ -1,5 +1,3 @@
-require EEx
-
 defmodule Chopin do
   defp perform(source, destination, layout \\ nil) do
     if File.dir?(source) do
