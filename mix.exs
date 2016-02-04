@@ -3,11 +3,12 @@ defmodule Chopin.Mixfile do
 
   def project do
     [app: :chopin,
-     version: "0.0.1",
-     elixir: "~> 1.2",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps]
+    version: "0.0.1",
+    elixir: "~> 1.2",
+    build_embedded: Mix.env == :prod,
+    escript: [main_module: Chopin],
+    start_permanent: Mix.env == :prod,
+    deps: deps]
   end
 
   # Configuration for the OTP application
@@ -27,6 +28,6 @@ defmodule Chopin.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [{:earmark, "~> 0.2.1"}]
   end
 end
