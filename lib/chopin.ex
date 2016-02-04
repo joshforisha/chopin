@@ -7,7 +7,7 @@ defmodule Chopin do
 
       unless File.dir?(destination) do
         File.mkdir(destination)
-        IO.puts " #{IO.ANSI.green}+ #{destination}/#{IO.ANSI.reset}"
+        IO.puts " #{IO.ANSI.green}create#{IO.ANSI.reset} #{destination}/"
       end
 
       layout_path = "#{source}/layout.eex"
@@ -26,23 +26,24 @@ defmodule Chopin do
             File.write!(dest_file, EEx.eval_file(layout,
               [yield: EEx.eval_file(source)]
             ))
-            IO.puts " #{IO.ANSI.blue}> #{dest_file}#{IO.ANSI.reset}"
+            IO.puts " #{IO.ANSI.magenta}parse#{IO.ANSI.reset} (using #{layout}) -> #{dest_file}"
           end
 
         String.ends_with?(source, ".md") ->
           if is_nil(layout), do: exit("No layout available for #{source}.")
           dest_file = String.replace_suffix(destination, ".md", ".html")
-          File.write!(dest_file, Earmark.to_html(EEx.eval_file(layout,
-            [yield: File.read!(source)]
-          )))
-          IO.puts " #{IO.ANSI.magenta}> (#{layout}) > #{dest_file}#{IO.ANSI.reset}"
+          File.write!(dest_file, EEx.eval_file(
+            layout,
+            [yield: Earmark.to_html(File.read!(source))]
+          ))
+          IO.puts " #{IO.ANSI.magenta}parse#{IO.ANSI.reset} (using #{layout}) -> #{dest_file}"
 
         String.starts_with?(source, ".") ->
-          IO.puts " #{IO.ANSI.red}x #{source}"
+          IO.puts " #{IO.ANSI.red}ignore#{IO.ANSI.reset} #{source}"
 
         true ->
           File.cp(source, destination)
-          IO.puts " #{IO.ANSI.green}> #{destination}#{IO.ANSI.reset}"
+          IO.puts " #{IO.ANSI.blue}copy#{IO.ANSI.reset} #{destination}"
       end
     end
   end
