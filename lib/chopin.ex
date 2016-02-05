@@ -26,7 +26,7 @@ defmodule Chopin do
             File.write!(dest_file, EEx.eval_file(layout,
               [yield: EEx.eval_file(source)]
             ))
-            IO.puts " #{IO.ANSI.magenta}parse#{IO.ANSI.reset} (using #{layout}) -> #{dest_file}"
+            IO.puts " #{IO.ANSI.magenta}parse#{IO.ANSI.reset} #{source} (into #{layout}) -> #{dest_file}"
           end
 
         String.ends_with?(source, ".md") ->
@@ -36,14 +36,14 @@ defmodule Chopin do
             layout,
             [yield: Earmark.to_html(File.read!(source))]
           ))
-          IO.puts " #{IO.ANSI.magenta}parse#{IO.ANSI.reset} (using #{layout}) -> #{dest_file}"
+          IO.puts " #{IO.ANSI.magenta}parse#{IO.ANSI.reset} #{source} (into #{layout}) -> #{dest_file}"
 
-        String.starts_with?(source, ".") ->
+        String.starts_with?(String.split(source, "/") |> List.last, ".") ->
           IO.puts " #{IO.ANSI.red}ignore#{IO.ANSI.reset} #{source}"
 
         true ->
           File.cp(source, destination)
-          IO.puts " #{IO.ANSI.blue}copy#{IO.ANSI.reset} #{destination}"
+          IO.puts " #{IO.ANSI.blue}copy#{IO.ANSI.reset} #{source} -> #{destination}"
       end
     end
   end
