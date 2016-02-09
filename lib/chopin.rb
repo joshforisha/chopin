@@ -66,12 +66,12 @@ module Chopin
       puts " #{PURPLE}Parse#{WHITE} #{source} -> #{destination}"
 
       File.new(destination, 'w').write(
-        ERB.new(File.read(layout)).result(Namespace.new({
+        ERB.new(File.read(source)).result(Namespace.new({
           page_name: get_page_name(source)
-        }))
+        }).get_binding)
       )
     else
-      puts " #{PURPLE}Parse#{WHITE} #{source} (into #{layout}) -> #{destination_html}"
+      puts " #{PURPLE}Parse#{WHITE} #{source} (into #{layout}) -> #{destination}"
 
       render_template(destination, layout, Namespace.new({
         page_name: get_page_name(source),
