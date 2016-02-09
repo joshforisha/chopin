@@ -54,6 +54,7 @@ module Chopin
 
   def self.get_page_name(file_name)
     File.dirname(file_name).sub(@root, '').split('/')
+      .reject { |dir| dir == ''}
       .push(File.basename(file_name, File.extname(file_name)))
       .join('-')
   end
