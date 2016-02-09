@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'chopin'
-  s.version = '0.0.6'
+  s.version = '0.0.7'
   s.license = 'MIT'
   s.summary = 'Chopin'
   s.description = 'An elegant, simple static site generator'
@@ -8,7 +8,11 @@ Gem::Specification.new do |s|
   s.email = 'josh@forisha.com'
   s.homepage = 'https://github.com/joshforisha/chopin'
   s.executables = ['chopin']
-  s.files = ['lib/chopin.rb', 'lib/chopin/pygments_renderer.rb']
+  s.files = [
+    'lib/chopin.rb',
+    'lib/chopin/namespace.rb',
+    'lib/chopin/pygments_renderer.rb'
+  ]
 
   s.add_runtime_dependency 'pygments.rb', ['= 0.6.3']
   s.add_runtime_dependency 'redcarpet', ['= 3.3.4']
