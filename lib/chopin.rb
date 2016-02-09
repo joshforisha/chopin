@@ -6,21 +6,20 @@ require 'redcarpet'
 require 'sass'
 
 module Chopin
-  def self.copy(source, destination, layout = nil)
+  def self.copy(source, dest_root, layout = nil)
     @root = source unless @root
 
     if File.directory?(source)
+      destination = "#{dest_root}/#{File.basename(source).sub(@root, '')}".chomp('/')
+
       unless Dir.exists?(destination)
         Dir.mkdir(destination)
         puts " #{GREEN}Create#{WHITE} #{destination}"
       end
 
-      source_directory = Dir.new(source)
-      destination_directory = Dir.new(destination)
-
       layout = "#{source}/layout.erb" if File.exist?("#{source}/layout.erb")
 
-      source_directory.each do |file|
+      Dir.new(source).each do |file|
         next if file == '.' || file == '..'
 
         if file[0] == '.'
@@ -33,20 +32,20 @@ module Chopin
     else
       case File.extname(source)
         when '.erb'
-          process_erb(source, destination, layout) unless File.basename(source, '.erb') == 'layout'
+          process_erb(source, dest_root, layout) unless File.basename(source, '.erb') == 'layout'
 
         when '.md'
-          process_markdown(source, destination, layout)
+          process_markdown(source, dest_root, layout)
 
         when '.sass'
-          process_sass(source, destination, :sass) unless File.basename(source)[0] == '_'
+          process_sass(source, dest_root, :sass) unless File.basename(source)[0] == '_'
 
         when '.scss'
-          process_sass(source, destination, :scss) unless File.basename(source)[0] == '_'
+          process_sass(source, dest_root, :scss) unless File.basename(source)[0] == '_'
 
         else
           puts " #{BLUE}Copy#{WHITE} #{source} -> #{destination}"
-          FileUtils.cp(source, destination)
+          FileUtils.cp(source, dest_root)
       end
     end
   end
@@ -59,34 +58,45 @@ module Chopin
       .join('-')
   end
 
-  def self.process_erb(source, destination, layout)
+  def self.process_erb(source, dest_dir, layout)
     base_name = File.basename(source, '.erb')
-    destination_html = "#{destination}/#{base_name}.html"
-    puts " #{PURPLE}Parse#{WHITE} #{source} (into #{layout}) -> #{destination_html}"
+    destination = "#{dest_dir}/#{base_name}.html"
 
-    render_template(destination_html, layout, Namespace.new({
-      page_name: get_page_name(source),
-      content: ERB.new(File.read(source)).result
-    }))
+    if layout == nil
+      puts " #{PURPLE}Parse#{WHITE} #{source} -> #{destination}"
+
+      File.new(destination, 'w').write(
+        ERB.new(File.read(layout)).result(Namespace.new({
+          page_name: get_page_name(source)
+        }))
+      )
+    else
+      puts " #{PURPLE}Parse#{WHITE} #{source} (into #{layout}) -> #{destination_html}"
+
+      render_template(destination, layout, Namespace.new({
+        page_name: get_page_name(source),
+        content: ERB.new(File.read(source)).result
+      }))
+    end
   end
 
-  def self.process_markdown(source, destination, layout)
+  def self.process_markdown(source, dest_dir, layout)
     base_name = File.basename(source, '.md')
-    destination_html = "#{destination}/#{base_name}.html"
-    puts " #{PURPLE}Parse#{WHITE} #{source} (into #{layout}) -> #{destination_html}"
+    destination = "#{dest_dir}/#{base_name}.html"
+    puts " #{PURPLE}Parse#{WHITE} #{source} (into #{layout}) -> #{destination}"
 
-    render_template(destination_html, layout, Namespace.new({
+    render_template(destination, layout, Namespace.new({
       page_name: get_page_name(source),
       content: MD.render(File.new(source).read)
     }))
   end
 
-  def self.process_sass(source, destination, type)
+  def self.process_sass(source, dest_dir, type)
     base_name = File.basename(source, File.extname(source))
-    destination_css = "#{destination}/#{base_name}.css"
-    puts " #{CYAN}Convert#{WHITE} #{source} -> #{destination_css}"
+    destination = "#{dest_dir}/#{base_name}.css"
+    puts " #{CYAN}Convert#{WHITE} #{source} -> #{destination}"
 
-    File.new(destination_css, 'w').write(
+    File.new(destination, 'w').write(
       Sass::Engine.new(File.new(source).read,
         load_paths: [File.dirname(source)],
         syntax: type
@@ -94,8 +104,8 @@ module Chopin
     )
   end
 
-  def self.render_template(destination_html, layout, namespace)
-    File.new(destination_html, 'w').write(
+  def self.render_template(destination, layout, namespace)
+    File.new(destination, 'w').write(
       ERB.new(File.read(layout)).result(namespace.get_binding)
     )
   end
