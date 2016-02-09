@@ -6,7 +6,6 @@ require 'sass'
 
 module Chopin
   def self.convert_sass(source, type)
-    puts "#{source} : #{File.dirname(source)}"
     Sass::Engine.new(File.new(source).read,
       load_paths: [File.dirname(source)],
       syntax: type
