@@ -4,4 +4,4 @@ $:.unshift(lib_path)
 
 require 'chopin'
 
-Chopin.copy(ARGV[0], ARGV[1])
+Chopin.copy(ARGV[0].chomp('/'), ARGV[1].chomp('/'))
