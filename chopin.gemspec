@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email = 'josh@forisha.com'
   s.homepage = 'https://github.com/joshforisha/chopin'
   s.executables = ['chopin']
-  s.files = ['lib/chopin.rb']
+  s.files = ['lib/pygments_renderer.rb']
 
   s.add_runtime_dependency "pygments.rb", ['= 0.6.3']
   s.add_runtime_dependency "redcarpet", ['= 3.3.2']
