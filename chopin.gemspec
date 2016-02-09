@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'chopin'
-  s.version = '1.0.0'
+  s.version = '0.0.3'
   s.license = 'MIT'
   s.summary = 'Chopin'
   s.description = 'An elegant, simple static site generator'
