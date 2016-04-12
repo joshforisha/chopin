@@ -4,4 +4,9 @@ $:.unshift(lib_path)
 
 require 'chopin'
 
+if ARGV.length != 2
+  puts "Usage: chopin <source> <destination>"
+  exit
+end
+
 Chopin.copy(ARGV[0].chomp('/'), ARGV[1].chomp('/'))
